@@ -1,6 +1,6 @@
 # Created by Muhammet Safa Güner at 7.06.2020
 
-Feature: Hepsiburada login tests
+Feature: Login tests
 
   Scenario: Success test for login
     Given I navigate to login page
