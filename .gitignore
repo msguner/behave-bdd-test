@@ -1,0 +1,13 @@
+.idea/
+output/
+.DS_Store
+.vscode/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+venv/
+screenshots/
+allure-report/
+reports/*
