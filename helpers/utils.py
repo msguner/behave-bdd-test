@@ -1,9 +1,7 @@
-import logging
 import os
 import random
 import string
-import sys
-import types
+
 from os.path import join, dirname
 
 
@@ -121,94 +119,3 @@ class Utils(object):
             if item not in list2:
                 return False
         return True
-
-    @staticmethod
-    def get_loggerr(logger_name, level=logging.INFO):
-        logger = logging.getLogger(logger_name)
-        logging.basicConfig(stream=sys.stdout, level=level, format='%(name)-12s: %(levelname)-8s: %(message)s')
-        coloredlogs.install(level="INFO", logger=logger, fmt="%(name)-12s: %(levelname)-8s: %(message)s")
-        return logger
-
-    @staticmethod
-    def get_logger():
-        # --- Handlers ---
-        file_handler = logging.FileHandler(filename='mordor.log')
-        file_handler.setLevel(logging.ERROR)
-        console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setLevel(logging.INFO)
-        handlers = [file_handler, console_handler]
-
-        logger = logging.getLogger()
-        logging.basicConfig(
-            level=logging.INFO,
-            # format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
-            format='[%(levelname)s] [%(asctime)s] {%(filename)s:%(lineno)d} - %(message)s',
-            # datefmt='%H:%M:%S %d-%m-%Y',
-            datefmt='%H:%M:%S',
-            handlers=handlers
-        )
-        # logging.disable(logging.CRITICAL)
-        # logging.captureWarnings(False)
-
-        return logger
-
-    # todo bir ara logger class olusturulup bir loglama alt yapısı kurulacak...
-    # https://stackoverflow.com/questions/20111758/how-to-insert-newline-in-python-logging
-    # https://stackoverflow.com/questions/7173033/duplicate-log-output-when-using-python-logging-module
-    # https://realpython.com/python-logging/
-    @staticmethod
-    def get_logger__():
-        # https://stackoverflow.com/questions/20111758/how-to-insert-newline-in-python-logging
-        def log_newline(self, how_many_lines=1):
-            # Switch handler, output a blank line
-            self.removeHandler(self.console_handler)
-            self.addHandler(self.blank_handler)
-            for i in range(how_many_lines):
-                self.info('')
-
-            # Switch back
-            self.removeHandler(self.blank_handler)
-            self.addHandler(self.console_handler)
-
-        logger = logging.getLogger(__name__)
-
-        # ------------------------ Handlers ------------------------
-        # Console handler
-        c_handler = logging.StreamHandler(sys.stdout)
-        c_handler.setLevel(logging.WARNING)
-        # File handler
-        f_handler = logging.FileHandler(filename='mordor.log')
-        f_handler.setLevel(logging.INFO)
-        # Blank handler
-        b_handler = logging.StreamHandler()
-        b_handler.setLevel(logging.DEBUG)
-
-        # Create formatters and add it to handlers
-        f_formatter = logging.Formatter('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
-        c_formatter = logging.Formatter('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
-        b_formatter = logging.Formatter('')
-        f_handler.setFormatter(f_formatter)
-        c_handler.setFormatter(c_formatter)
-        b_handler.setFormatter(b_formatter)
-
-        # Add handlers to the logger
-        logger.addHandler(f_handler)
-        logger.addHandler(c_handler)
-        logger.addHandler(b_handler)
-
-        # newLine method
-        logger.newline = types.MethodType(log_newline, logger)
-
-        return logger
-
-    @staticmethod
-    def max(x, y):
-        if x < y:
-            return y
-        return x
-
-    @staticmethod
-    def min(x, y):
-        if x > y:
-            return y
-        return x

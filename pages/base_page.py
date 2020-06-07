@@ -3,8 +3,8 @@ import traceback
 
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver import ActionChains
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BasePage(object):
@@ -15,8 +15,7 @@ class BasePage(object):
 
     def wait_and_find_element(self, *locator, seconds):
         try:
-            return WebDriverWait(self.driver, seconds).until(
-                EC.presence_of_element_located(locator))
+            return WebDriverWait(self.driver, seconds).until(EC.presence_of_element_located(locator))
         except StaleElementReferenceException:
             raise AssertionError("Element could not be found.")
 

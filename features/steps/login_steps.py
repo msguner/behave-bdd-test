@@ -25,3 +25,8 @@ def step_impl(context):
 def step_impl(context):
     assert context.driver.current_url != 'https://secure.sahibinden.com/giris'
     # assert 'Login successful !!' in context.browser.page_source
+
+
+@then("login is unsuccessful")
+def step_impl(context):
+    assert context.driver.current_url == 'https://secure.sahibinden.com/giris'

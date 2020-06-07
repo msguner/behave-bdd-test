@@ -12,4 +12,4 @@ Feature: Login tests
     Given I navigate to login page
     And I enter username="msguner55@gmail.com" and password="12345"
     When I click on Submit button
-    # Then check login fails
+    Then login is unsuccessful
