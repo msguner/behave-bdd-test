@@ -2,7 +2,11 @@ import os
 import shutil
 import time
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 from helpers.driver import Driver
+from helpers.utils import Utils
 
 BEHAVE_DEBUG_ON_ERROR = False
 
@@ -18,6 +22,8 @@ def before_scenario(context, scenario):
     context.driver.maximize_window()
     context.driver.implicitly_wait(15)
     context.driver.get("https://www.sahibinden.com/")
+    #context.driver.get("https://www.dekopasaj.com/")
+
 
 
 def after_scenario(context, scenario):
@@ -27,11 +33,12 @@ def after_scenario(context, scenario):
             os.makedirs("screenshots")
         os.chdir("screenshots")
         context.driver.save_screenshot(scenario.name + "_failed.png")
+
+    context.driver.close()
     context.driver.quit()
 
 
 def after_all(context):
-    print("User data:", context.config.userdata)
     # behave -D ARCHIVE=Yes
     if 'ARCHIVE' in context.config.userdata.keys():
         if os.path.exists("screenshots"):
@@ -64,16 +71,25 @@ def set_driver(context):
 
     # create driver
     if browser == 'chrome':
-        context.driver = Driver().driver  # Burası dinamik olacak. belki parametre alabılır. araştırılacak
+        # context.driver = Driver().driver  # Burası dinamik olacak. belki parametre alabılır. araştırılacak
+        driver_path = Utils.get_full_path('drivers', 'chromedriver.exe')
+        chrome_options = Options()
+        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument('--no-proxy-server')
+        chrome_options.add_argument("--proxy-server='direct://'")
+        chrome_options.add_argument("--proxy-bypass-list=*")
+        driver = webdriver.Chrome(options=chrome_options, executable_path=driver_path)
+        context.driver = driver
+
     # elif browser == 'firefox':
-    #     context.browser = webdriver.Firefox()
+    #     context.driver = webdriver.Firefox()
     # elif browser == 'safari':
-    #     context.browser = webdriver.Safari()
+    #     context.driver = webdriver.Safari()
     # elif browser == 'ie':
-    #     context.browser = webdriver.Ie()
+    #     context.driver = webdriver.Ie()
     # elif browser == 'opera':
-    #     context.browser = webdriver.Opera()
+    #     context.driver = webdriver.Opera()
     # elif browser == 'phantomjs':
-    #     context.browser = webdriver.PhantomJS()
+    #     context.driver = webdriver.PhantomJS()
     else:
         raise ValueError("Browser you entered:", browser, "is invalid value")
