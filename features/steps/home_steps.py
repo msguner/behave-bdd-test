@@ -1,6 +1,6 @@
-from behave import given, then
-
-from pages.header_page import HeaderPage
-from pages.home_page import HomePage
+from behave import step
 
 
+@step('I navigate to Sahibinden home page')
+def step_impl(context):
+    context.driver.get("https://www.sahibinden.com/")

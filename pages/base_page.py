@@ -7,65 +7,54 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BasePage(object):
+    __TIMEOUT = 20
 
     def __init__(self, driver):
-        self.driver = driver
-        self.timeout = 30
+        self._driver = driver
+        self._driver_wait = WebDriverWait(driver, BasePage.__TIMEOUT)
+
+    """
+    def __init__(self, driver):
+        super(BasePage, self).__init__()
+        self._driver_wait = WebDriverWait(driver, BasePage.__TIMEOUT)
+        self._driver = driver
+    """
 
     def wait_for_element(self, *locator, seconds):
         try:
-            return WebDriverWait(self.driver, seconds).until(EC.presence_of_element_located(locator))
+            return WebDriverWait(self._driver, seconds).until(EC.presence_of_element_located(locator))
         except NoSuchElementException as err:
             raise AssertionError("Element could not be found.")
 
     def find_element(self, *locator):
-        return self.driver.find_element(locator)
+        return self._driver.find_element(locator)
 
-    def visit(self, url):
-        self.driver.get(url)
-
-    def wait(self, seconds):
-        time.sleep(seconds)
-
-    def hover(self, element):
-        ActionChains(self.driver).move_to_element(element).perform()
-        self.wait(5)  # hoverda gerekıyor
-
-    def browser_clear(self):
-        self.driver.delete_all_cookies()
-        self.driver.execute_script('window.localStorage.clear()')
-        self.driver.execute_script('window.sessionStorage.clear()')
-        self.driver.refresh()
+    def find_elements(self, *locator):
+        return self._driver.find_elements(*locator)
 
     def is_exist(self, *locator, seconds):
         try:
-            WebDriverWait(self.driver, seconds).until(EC.presence_of_element_located(locator))
+            WebDriverWait(self._driver, seconds).until(EC.presence_of_element_located(locator))
         except NoSuchElementException:
             return False
         return True
 
-    """
-    def __getattr__(self, what):
-        try:
-            if what in self.locator_dictionary.keys():
-                try:
-                    element = WebDriverWait(self.browser, self.timeout).until(
-                        EC.presence_of_element_located(self.locator_dictionary[what])
-                    )
-                except(TimeoutException, StaleElementReferenceException):
-                    traceback.print_exc()
+    def go_url(self, url):
+        self._driver.get(url)
 
-                try:
-                    element = WebDriverWait(self.browser, self.timeout).until(
-                        EC.visibility_of_element_located(self.locator_dictionary[what])
-                    )
-                except(TimeoutException, StaleElementReferenceException):
-                    traceback.print_exc()
-                # I could have returned element, however because of lazy loading, I am seeking the element before return
-                return self.find_element(*self.locator_dictionary[what])
-        except AttributeError:
-            super(BasePage, self).__getattribute__("method_missing")(what)
+    def wait_seconds(self, seconds):
+        time.sleep(seconds)
 
-    def method_missing(self, what):
-        print("No %s here!" % what)
-    """
+    def hover(self, element):
+        ActionChains(self._driver).move_to_element(element).perform()
+        self.wait_seconds(5)  # hoverda gerekıyor
+
+    def close_tab(self):
+        self._driver.close()
+        self._driver.switch_to_window(self._driver.window_handles[0])
+
+    def browser_clear(self):
+        self._driver.delete_all_cookies()
+        self._driver.execute_script('window.localStorage.clear()')
+        self._driver.execute_script('window.sessionStorage.clear()')
+        self._driver.refresh()

@@ -4,6 +4,7 @@ Feature: My tests
 
   @login
   Scenario: Success test for login
+    * I navigate to Sahibinden home page
     * I navigate to login page
     * I enter username="pervenches@harveynaylor.buzz" and password="12345_asd"
     * I click on Submit button
@@ -11,6 +12,7 @@ Feature: My tests
 
   @login
   Scenario: Failure test for login
+    * I navigate to Sahibinden home page
     * I navigate to login page
     * I enter username="pervenches@harveynaylor.buzz" and password="12345"
     * I click on Submit button
@@ -18,16 +20,19 @@ Feature: My tests
 
   @sigh_up
   Scenario: Open registration page
+    * I navigate to Sahibinden home page
     * I navigate to sign up page
     * I see the registration page open
 
   @search
   Scenario:Search text and check no result screen
+    * I navigate to Sahibinden home page
     * I search "adsfghsadfghjk asdas"
     * I see the no result page
 
   @search
   Scenario Outline: Search text and open main category
+    * I navigate to Sahibinden home page
     * I search "<search_text>"
     * I open main category = "<category>" on search result page
 

@@ -16,4 +16,4 @@ class SearchPage(BasePage):
     def open_main_category(self, category_name):
         CATEGORY = (By.XPATH, "//div[@class='category-top-level']/a[text()='%s']" % category_name)
         self.wait_for_element(*CATEGORY, seconds=5).click()
-        self.wait(3)
+        self.wait_seconds(3)

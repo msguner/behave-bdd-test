@@ -34,5 +34,4 @@ class HeaderPage(BasePage):
         search_box = self.wait_for_element(*HeaderPageConstants.SEARCH_BOX.value, seconds=10)
         search_box.send_keys(text)
         search_box.send_keys(Keys.ENTER)
-        self.wait(5)
-
+        self.wait_seconds(5)
